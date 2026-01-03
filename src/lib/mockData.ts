@@ -1,4 +1,4 @@
-// Mock data for the Echo Flywheel Protocol
+// Mock data for USDPUMP
 
 export interface Token {
   id: string;
@@ -31,8 +31,8 @@ export interface ProtocolMetrics {
 export const mockTokens: Token[] = [
   {
     id: '1',
-    name: 'Echo Alpha',
-    symbol: 'EALPHA',
+    name: 'USD1 Alpha',
+    symbol: 'USD1A',
     mint: '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU',
     status: 'graduated',
     price: 0.0234,
@@ -42,8 +42,8 @@ export const mockTokens: Token[] = [
   },
   {
     id: '2',
-    name: 'Echo Beta',
-    symbol: 'EBETA',
+    name: 'USD1 Beta',
+    symbol: 'USD1B',
     mint: '3Kj8NHhDgYCTfFEzBLvZj9FJJKPbDZTEuKdRxU9vNQzP',
     status: 'bonding',
     price: 0.00089,
@@ -53,8 +53,8 @@ export const mockTokens: Token[] = [
   },
   {
     id: '3',
-    name: 'Echo Delta',
-    symbol: 'EDELTA',
+    name: 'USD1 Delta',
+    symbol: 'USD1D',
     mint: '9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM',
     status: 'bonding',
     price: 0.00156,
@@ -71,7 +71,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'capture',
     amount: 0.5,
     txHash: '4zN8...kL9m',
-    tokenSymbol: 'EALPHA',
+    tokenSymbol: 'USD1A',
   },
   {
     id: '2',
@@ -79,7 +79,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'apply',
     amount: 0.35,
     txHash: '7xR2...pQ4n',
-    tokenSymbol: 'EALPHA',
+    tokenSymbol: 'USD1A',
   },
   {
     id: '3',
@@ -87,7 +87,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'burn',
     amount: 0.1,
     txHash: '2mK9...vT6w',
-    tokenSymbol: 'EBETA',
+    tokenSymbol: 'USD1B',
   },
   {
     id: '4',
@@ -95,7 +95,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'lp',
     amount: 0.25,
     txHash: '8jH3...xN1r',
-    tokenSymbol: 'EALPHA',
+    tokenSymbol: 'USD1A',
   },
   {
     id: '5',
@@ -103,7 +103,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'capture',
     amount: 0.42,
     txHash: '5tY7...bM2s',
-    tokenSymbol: 'PDELTA',
+    tokenSymbol: 'USD1D',
   },
   {
     id: '6',
@@ -111,7 +111,7 @@ export const mockActivityLogs: ActivityLog[] = [
     action: 'apply',
     amount: 0.28,
     txHash: '1cZ4...hW8p',
-    tokenSymbol: 'EBETA',
+    tokenSymbol: 'USD1B',
   },
 ];
 
@@ -124,8 +124,8 @@ export const mockMetrics: ProtocolMetrics = {
 
 export const faqData = [
   {
-    question: 'What is the Echo Flywheel?',
-    answer: 'The Echo Flywheel is an automated system that captures creator activity and converts it into sustained buy pressure, liquidity reinforcement, and long-term token strength. Actions echo back into the token, creating a self-reinforcing cycle. It operates transparently on-chain with configurable parameters.',
+    question: 'What is USDPUMP?',
+    answer: 'USDPUMP is a pump.fun-native USD1 launcher with flywheel-based liquidity controls.',
   },
   {
     question: 'How does the capture mechanism work?',

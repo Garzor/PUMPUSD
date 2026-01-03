@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Overview", path: "/" },
-  { label: "Launch & Manage", path: "/dashboard" },
-  { label: "Roadmap", path: "/roadmap" },
-  { label: "Learn", path: "/learn" },
+  { label: "Create Coin", path: "/dashboard" },
+  { label: "Flywheel", path: "/dashboard" },
+  { label: "Docs", path: "/learn" },
 ];
 
 interface NavigationProps {
@@ -37,8 +37,8 @@ export function Navigation({ walletConnected, onConnectWallet }: NavigationProps
         <Link to="/" className="flex items-center gap-2 group">
           <div className="w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center">
             <img
-              src="/ChatGPT Image Dec 26, 2025 at 04_57_45 PM.png"
-              alt="Echo"
+              src="/ChatGPT Image Jan 3, 2026 at 02_12_07 PM.png"
+              alt="USDPUMP"
               className="w-full h-full object-contain"
             />
           </div>
@@ -46,7 +46,7 @@ export function Navigation({ walletConnected, onConnectWallet }: NavigationProps
             "font-semibold text-lg tracking-tight group-hover:text-primary transition-colors",
             isOverview ? "text-foreground" : "text-foreground"
           )}>
-            Echo
+            USDPUMP
           </span>
         </Link>
 

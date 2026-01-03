@@ -2,68 +2,68 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Echo Flywheel Protocol - Design System
+/* USDPUMP - Design System
    All colors MUST be HSL.
 */
 
 @layer base {
   :root {
-    /* Base dark theme - deep navy/black #070A12 */
-    --background: 220 50% 3%;
+    /* Base dark theme - #0B0F14 */
+    --background: 220 30% 7%;
     --foreground: 210 40% 98%;
 
-    /* Glass card styling */
-    --card: 220 40% 6%;
+    /* Glass card styling - #121823 */
+    --card: 220 25% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 40% 8%;
+    --popover: 220 25% 11%;
     --popover-foreground: 210 40% 98%;
 
-    /* Primary - Electric Cyan #4DE7FF */
-    --primary: 187 100% 65%;
-    --primary-foreground: 220 50% 3%;
+    /* Primary - Pump.fun Green #B8F6C4 */
+    --primary: 140 70% 88%;
+    --primary-foreground: 220 30% 7%;
 
-    /* Secondary - Violet #7C5CFF */
-    --secondary: 252 100% 68%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary - Not used, keep for compatibility */
+    --secondary: 140 70% 88%;
+    --secondary-foreground: 220 30% 7%;
 
     /* Muted - subtle grays */
-    --muted: 220 30% 12%;
+    --muted: 220 20% 15%;
     --muted-foreground: 215 20% 60%;
 
-    /* Accent - Warm Orange #FF7A18 (sparingly used) */
-    --accent: 25 100% 55%;
+    /* Accent - Bonk Orange #FF8A00 */
+    --accent: 28 100% 50%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Borders and inputs */
-    --border: 220 30% 15%;
-    --input: 220 30% 10%;
-    --ring: 187 100% 65%;
+    /* Borders and inputs - rgba(255,255,255,0.06) */
+    --border: 220 20% 18%;
+    --input: 220 20% 12%;
+    --ring: 140 70% 88%;
 
     --radius: 0.75rem;
 
     /* Glass effects - premium glassmorphism */
-    --glass-bg: 220 40% 8%;
-    --glass-border: 220 30% 20%;
-    --glass-glow: 187 100% 65%;
+    --glass-bg: 220 25% 11%;
+    --glass-border: 0 0% 100% / 0.06;
+    --glass-glow: 140 70% 88%;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(187 100% 65%) 0%, hsl(252 100% 68%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(25 100% 55%) 0%, hsl(40 100% 60%) 100%);
-    --gradient-dark: radial-gradient(ellipse at top, hsl(220 40% 8%) 0%, hsl(220 50% 3%) 70%);
+    --gradient-primary: linear-gradient(135deg, hsl(140 70% 88%) 0%, hsl(140 70% 88%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(28 100% 50%) 0%, hsl(28 100% 50%) 100%);
+    --gradient-dark: radial-gradient(ellipse at top, hsl(220 25% 11%) 0%, hsl(220 30% 7%) 70%);
 
     /* Sidebar */
-    --sidebar-background: 220 40% 4%;
+    --sidebar-background: 220 30% 7%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 187 100% 65%;
-    --sidebar-primary-foreground: 220 50% 3%;
-    --sidebar-accent: 220 30% 12%;
+    --sidebar-primary: 140 70% 88%;
+    --sidebar-primary-foreground: 220 30% 7%;
+    --sidebar-accent: 220 20% 15%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 220 30% 15%;
-    --sidebar-ring: 187 100% 65%;
+    --sidebar-border: 0 0% 100% / 0.06;
+    --sidebar-ring: 140 70% 88%;
   }
 }
 
@@ -78,18 +78,18 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    background: #070A12;
+    background: #0B0F14;
     background-attachment: fixed;
   }
 }
 
 @layer components {
-  /* Glassmorphism card - premium Echo style */
+  /* Glassmorphism card - premium USDPUMP style */
   .glass-card {
     @apply relative overflow-hidden rounded-xl;
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     box-shadow: 
       0 0 0 1px rgba(255, 255, 255, 0.05),
       0 8px 32px -8px rgba(0, 0, 0, 0.4);
@@ -111,8 +111,8 @@
   .glass-card-glow {
     @apply glass-card;
     box-shadow: 
-      0 0 0 1px rgba(255, 255, 255, 0.08),
-      0 0 40px -10px rgba(77, 231, 255, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 40px -10px rgba(184, 246, 196, 0.15),
       0 8px 32px -8px rgba(0, 0, 0, 0.4);
   }
 
@@ -148,10 +148,10 @@
   .hover-lift:hover {
     transform: translateY(-3px);
     box-shadow: 
-      0 0 0 1px rgba(255, 255, 255, 0.12),
-      0 0 50px -10px rgba(77, 231, 255, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 50px -10px rgba(184, 246, 196, 0.2),
       0 20px 40px -15px rgba(0, 0, 0, 0.5);
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.06);
   }
 
   /* Animated grid background */
@@ -225,10 +225,10 @@
 
   @keyframes pulseGlow {
     0%, 100% {
-      box-shadow: 0 0 20px -5px hsl(var(--primary) / 0.3);
+      box-shadow: 0 0 20px -5px rgba(184, 246, 196, 0.3);
     }
     50% {
-      box-shadow: 0 0 40px -5px hsl(var(--primary) / 0.5);
+      box-shadow: 0 0 40px -5px rgba(184, 246, 196, 0.5);
     }
   }
 

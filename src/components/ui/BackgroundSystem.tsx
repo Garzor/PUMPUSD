@@ -15,9 +15,9 @@ export function BackgroundSystem({ children, showEchoAura = false, className = "
         className="fixed inset-0 pointer-events-none z-0"
         style={{
           background: `
-            radial-gradient(ellipse at 20% 0%, rgba(124, 92, 255, 0.08) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 100%, rgba(77, 231, 255, 0.06) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(7, 10, 18, 0.95) 0%, #070A12 100%)
+            radial-gradient(ellipse at 20% 0%, rgba(184, 246, 196, 0.04) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 100%, rgba(184, 246, 196, 0.03) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(11, 15, 20, 0.95) 0%, #0B0F14 100%)
           `,
         }}
       />
@@ -35,8 +35,8 @@ export function BackgroundSystem({ children, showEchoAura = false, className = "
         className="fixed inset-0 pointer-events-none z-0 opacity-[0.08]"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(77, 231, 255, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(77, 231, 255, 0.15) 1px, transparent 1px)
+            linear-gradient(rgba(184, 246, 196, 0.08) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(184, 246, 196, 0.08) 1px, transparent 1px)
           `,
           backgroundSize: "60px 60px",
         }}
@@ -49,9 +49,9 @@ export function BackgroundSystem({ children, showEchoAura = false, className = "
       >
         <defs>
           <linearGradient id="streamGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#4DE7FF" stopOpacity="0.3" />
-            <stop offset="50%" stopColor="#7C5CFF" stopOpacity="0.2" />
-            <stop offset="100%" stopColor="#4DE7FF" stopOpacity="0.1" />
+            <stop offset="0%" stopColor="#B8F6C4" stopOpacity="0.15" />
+            <stop offset="50%" stopColor="#B8F6C4" stopOpacity="0.1" />
+            <stop offset="100%" stopColor="#B8F6C4" stopOpacity="0.05" />
           </linearGradient>
         </defs>
         {[...Array(8)].map((_, i) => {

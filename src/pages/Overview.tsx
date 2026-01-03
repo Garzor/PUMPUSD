@@ -109,31 +109,29 @@ export function Overview() {
 
   return (
     <div className="page-enter">
-      {/* Hero Section with Echo Wave */}
+      {/* Hero Section */}
       <section className="container mx-auto px-6 pt-32 pb-40 relative">
         <EchoWave className="absolute inset-0 -z-10" />
         
         <div className="max-w-5xl mx-auto text-center stagger-children relative z-10">
           {/* Headline */}
-          <h1 className="text-[3.4rem] md:text-[5.5rem] lg:text-[7.3rem] font-extrabold tracking-tight leading-[0.95] mb-12">
-            <span className="block text-foreground mb-2">The</span>
-            <span className="block relative">
-              <span className="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient text-[1.2em] relative z-10">
-                Echo
-              </span>
-              <span className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary opacity-30 blur-2xl -z-0" />
-            </span>
-            <span className="block text-foreground mt-2">Flywheel.</span>
+          <h1 className="text-[2.75rem] md:text-[4.5rem] lg:text-[6rem] font-bold tracking-tight leading-[1.0] mb-4">
+            Launch <span style={{ color: '#FF8A00' }}>USD1</span> on <span style={{ color: '#B8F6C4' }}>pump.fun</span>
           </h1>
+          
+          {/* Secondary Headline */}
+          <h2 className="text-[1.25rem] md:text-[2rem] lg:text-[2.75rem] font-medium text-foreground/87 leading-tight mb-12">
+            No conversion. No pretending.
+          </h2>
 
           {/* Subhead */}
           <p className="text-xl md:text-2xl text-foreground/90 leading-relaxed mb-8 max-w-3xl mx-auto font-normal">
-            Convert creator activity into sustained buy pressure, liquidity reinforcement, and long-term strength.
+            A launcher with built-in controls that recycle trading activity into buy pressure.
           </p>
 
           {/* Microcopy */}
           <p className="text-lg text-muted-foreground/70 mb-16 max-w-2xl mx-auto">
-            Observable on-chain actions. Configurable modes. Transparent logs.
+            Dollar-denominated launches · Flywheel controls · Fully on-chain
           </p>
 
           {/* CTA Row */}
@@ -141,9 +139,9 @@ export function Overview() {
             <Link to="/dashboard">
               <Button 
                 size="lg" 
-                className="bg-accent hover:bg-accent/90 text-accent-foreground font-bold text-lg px-8 py-6 gap-2 shadow-[0_0_30px_-5px_rgba(255,122,24,0.5)] hover:shadow-[0_0_40px_-5px_rgba(255,122,24,0.7)] hover:scale-105 transition-all duration-300"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold text-lg px-8 py-6 gap-2 shadow-[0_0_30px_-5px_rgba(184,246,196,0.5)] hover:shadow-[0_0_40px_-5px_rgba(184,246,196,0.7)] hover:scale-105 transition-all duration-300 rounded-lg"
               >
-                Launch Token
+                Create USD1 Coin
                 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
@@ -151,23 +149,12 @@ export function Overview() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-2 font-bold text-lg px-8 py-6 hover:shadow-[0_0_30px_-5px_rgba(77,231,255,0.4)] hover:scale-105 transition-all duration-300 bg-transparent"
+                className="border-2 font-bold text-lg px-8 py-6 hover:shadow-[0_0_30px_-5px_rgba(184,246,196,0.4)] hover:scale-105 transition-all duration-300 bg-transparent rounded-lg"
                 style={{
-                  borderColor: "rgba(77, 231, 255, 0.6)",
+                  borderColor: "rgba(255, 255, 255, 0.2)",
                 }}
               >
-                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  Manage Tokens
-                </span>
-              </Button>
-            </Link>
-            <Link to="/learn">
-              <Button 
-                size="lg" 
-                variant="ghost" 
-                className="text-foreground/80 hover:text-foreground font-semibold text-lg px-6 py-6"
-              >
-                How it Works
+                Manage Flywheel
               </Button>
             </Link>
           </div>
@@ -192,7 +179,7 @@ export function Overview() {
               suffix=" SOL"
             />
             <StatTile 
-              label="Echo Applied" 
+              label="Buy Pressure Applied" 
               value={mockMetrics.momentumApplied} 
               suffix=" SOL"
               showSparkline={true}

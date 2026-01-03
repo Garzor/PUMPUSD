@@ -403,21 +403,19 @@ export function Dashboard() {
             {/* Action Buttons */}
             <div className="flex gap-3">
               <Button 
-                className="flex-1 bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300 shadow-[0_0_20px_-5px_rgba(255,122,24,0.4)] hover:shadow-[0_0_30px_-5px_rgba(255,122,24,0.6)]"
+                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 shadow-[0_0_20px_-5px_rgba(184,246,196,0.4)] hover:shadow-[0_0_30px_-5px_rgba(184,246,196,0.6)] rounded-lg"
               >
                 Activate Flywheel
               </Button>
               <Button
                 variant="outline"
-                className="flex-1 border-2 hover:shadow-[0_0_20px_-5px_rgba(77,231,255,0.3)] transition-all duration-300 bg-transparent"
+                className="flex-1 border-2 hover:shadow-[0_0_20px_-5px_rgba(184,246,196,0.3)] transition-all duration-300 bg-transparent rounded-lg"
                 style={{
-                  borderColor: "rgba(77, 231, 255, 0.5)",
+                  borderColor: "rgba(255, 255, 255, 0.2)",
                 }}
                 onClick={() => setSimulateOpen(true)}
               >
-                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  Simulate
-                </span>
+                Simulate
               </Button>
             </div>
           </GlassCard>

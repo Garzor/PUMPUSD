@@ -88,7 +88,7 @@ export function WalletConnectModal({
               className={cn(
                 "w-full flex items-center gap-4 p-5 rounded-xl border transition-all duration-300",
                 "bg-white/5 hover:bg-white/10 border-white/10 hover:border-primary/40",
-                "hover:shadow-[0_0_25px_-5px_rgba(77,231,255,0.4)] hover:scale-[1.02]",
+                "hover:shadow-[0_0_25px_-5px_rgba(184,246,196,0.4)] hover:scale-[1.02]",
                 "group cursor-pointer"
               )}
             >
@@ -122,7 +122,7 @@ export function WalletConnectModal({
 
         <div className="px-6 pb-6">
           <p className="text-xs text-center text-muted-foreground/70">
-            By connecting a wallet, you agree to Echo's Terms of Service and Privacy Policy
+            By connecting a wallet, you agree to USDPUMP's Terms of Service and Privacy Policy
           </p>
         </div>
       </DialogContent>

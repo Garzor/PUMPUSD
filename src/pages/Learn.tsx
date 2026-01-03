@@ -21,31 +21,31 @@ import { cn } from "@/lib/utils";
 
 const steps = [
   { 
-    id: 1, 
-    label: "Capture", 
-    description: "Monitor and collect fees from on-chain activity",
-    icon: Download,
+    id: "01", 
+    label: "Create", 
+    description: "Create a USD1 coin.",
+    icon: Rocket,
     color: "text-primary"
   },
   { 
-    id: 2, 
-    label: "Convert", 
-    description: "Transform captured value according to your settings",
-    icon: RefreshCw,
-    color: "text-secondary"
-  },
-  { 
-    id: 3, 
-    label: "Apply", 
-    description: "Execute buy pressure, LP additions, or burns",
+    id: "02", 
+    label: "Trade", 
+    description: "People trade using USD1.",
     icon: TrendingUp,
-    color: "text-accent"
+    color: "text-primary"
   },
   { 
-    id: 4, 
-    label: "Reinforce", 
-    description: "Strengthen momentum cycle for sustained growth",
-    icon: Droplets,
+    id: "03", 
+    label: "Spin", 
+    description: "Flywheel turns activity into buy pressure.",
+    icon: RefreshCw,
+    color: "text-primary"
+  },
+  { 
+    id: "04", 
+    label: "Graduate", 
+    description: "Coin moves to PumpSwap.",
+    icon: Activity,
     color: "text-primary"
   },
 ];
@@ -63,11 +63,8 @@ export function Learn() {
       {/* Header */}
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Learn how <span className="text-gradient-primary">Echo</span> works
+          How It Works
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          A self-reinforcing cycle where actions echo back into the token, creating sustained momentum
-        </p>
       </div>
 
       {/* Stepper */}
@@ -89,7 +86,7 @@ export function Learn() {
                   )}>
                     <step.icon className={cn("w-7 h-7", step.color)} />
                   </div>
-                  <div className="text-xs text-muted-foreground mb-1">Step {step.id}</div>
+                  <div className="text-xs text-muted-foreground mb-1">{step.id}</div>
                   <h3 className="font-semibold mb-2">{step.label}</h3>
                   <p className="text-sm text-muted-foreground">{step.description}</p>
                 </div>

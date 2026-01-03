@@ -29,7 +29,7 @@ export function Footer() {
 
           {/* Disclaimer */}
           <p className="text-xs text-muted-foreground/70 text-center md:text-right max-w-md">
-            Experimental software. Use at your own risk. This protocol is provided as-is without warranties of any kind.
+            1% fee · 50% to creators · immutable
           </p>
         </div>
       </div>
