@@ -31,7 +31,7 @@ export function Roadmap() {
       {/* Header */}
       <div className="text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          USDPUMP <span className="text-gradient-primary">Roadmap</span>
+          PumpUSD <span className="text-gradient-primary">Roadmap</span>
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
           Our journey to build the most powerful flywheel engine for token creators

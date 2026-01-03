@@ -38,7 +38,7 @@ export function Navigation({ walletConnected, onConnectWallet }: NavigationProps
           <div className="w-12 h-12 rounded-lg overflow-hidden flex items-center justify-center">
             <img
               src="/ChatGPT Image Jan 3, 2026 at 02_12_07 PM.png"
-              alt="USDPUMP"
+              alt="PumpUSD"
               className="w-full h-full object-contain"
             />
           </div>
@@ -46,7 +46,7 @@ export function Navigation({ walletConnected, onConnectWallet }: NavigationProps
             "font-semibold text-lg tracking-tight group-hover:text-primary transition-colors",
             isOverview ? "text-foreground" : "text-foreground"
           )}>
-            USDPUMP
+            PumpUSD
           </span>
         </Link>
 

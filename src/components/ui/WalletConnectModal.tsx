@@ -122,7 +122,7 @@ export function WalletConnectModal({
 
         <div className="px-6 pb-6">
           <p className="text-xs text-center text-muted-foreground/70">
-            By connecting a wallet, you agree to USDPUMP's Terms of Service and Privacy Policy
+            By connecting a wallet, you agree to PumpUSD's Terms of Service and Privacy Policy
           </p>
         </div>
       </DialogContent>

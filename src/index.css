@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* USDPUMP - Design System
+/* PumpUSD - Design System
    All colors MUST be HSL.
 */
 
@@ -84,7 +84,7 @@
 }
 
 @layer components {
-  /* Glassmorphism card - premium USDPUMP style */
+  /* Glassmorphism card - premium PumpUSD style */
   .glass-card {
     @apply relative overflow-hidden rounded-xl;
     background: rgba(255, 255, 255, 0.03);

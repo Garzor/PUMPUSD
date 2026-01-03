@@ -1,4 +1,4 @@
-// Mock data for USDPUMP
+// Mock data for PumpUSD
 
 export interface Token {
   id: string;
@@ -124,8 +124,8 @@ export const mockMetrics: ProtocolMetrics = {
 
 export const faqData = [
   {
-    question: 'What is USDPUMP?',
-    answer: 'USDPUMP is a pump.fun-native USD1 launcher with flywheel-based liquidity controls.',
+    question: 'What is PumpUSD?',
+    answer: 'PumpUSD is a pump.fun-native USD1 launcher with flywheel-based liquidity controls.',
   },
   {
     question: 'How does the capture mechanism work?',
