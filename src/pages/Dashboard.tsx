@@ -3,6 +3,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import {
@@ -12,6 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Dialog,
   DialogContent,
@@ -24,549 +30,423 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { mockTokens, mockActivityLogs, type Token, type ActivityLog } from "@/lib/mockData";
 import {
   Wallet,
-  Search,
-  Import,
   ArrowRight,
   TrendingUp,
-  Droplets,
   Zap,
   Activity,
-  AlertTriangle,
-  CheckCircle2,
-  Clock,
-  ExternalLink,
   Info,
   Flame,
-  BarChart3,
+  Upload,
+  ChevronUp,
+  FileText,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type FlywheelMode = "balanced" | "buyback" | "liquidity" | "burn";
-type ActionFilter = "all" | "capture" | "apply" | "burn" | "lp";
 
 export function Dashboard() {
   const [walletConnected, setWalletConnected] = useState(false);
-  const [selectedToken, setSelectedToken] = useState<Token | null>(mockTokens[0]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [mintAddress, setMintAddress] = useState("");
+  const [tokenName, setTokenName] = useState("");
+  const [ticker, setTicker] = useState("");
+  const [description, setDescription] = useState("");
+  const [tokenImage, setTokenImage] = useState<File | null>(null);
+  const [socialLinksOpen, setSocialLinksOpen] = useState(true);
+  const [websiteUrl, setWebsiteUrl] = useState("");
+  const [twitterUrl, setTwitterUrl] = useState("");
+  const [telegramUrl, setTelegramUrl] = useState("");
+  const [discordUrl, setDiscordUrl] = useState("");
   const [flywheelMode, setFlywheelMode] = useState<FlywheelMode>("balanced");
   const [frequency, setFrequency] = useState("5m");
   const [buyPressure, setBuyPressure] = useState([50]);
   const [burnIntensity, setBurnIntensity] = useState([30]);
   const [autoApply, setAutoApply] = useState(true);
   const [publicLogs, setPublicLogs] = useState(true);
-  const [actionFilter, setActionFilter] = useState<ActionFilter>("all");
   const [simulateOpen, setSimulateOpen] = useState(false);
-  const [checkerAddress, setCheckerAddress] = useState("");
 
-  const filteredTokens = mockTokens.filter(
-    (token) =>
-      token.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      token.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const filteredLogs = mockActivityLogs.filter(
-    (log) => actionFilter === "all" || log.action === actionFilter
-  );
-
-  const formatTime = (date: Date) => {
-    const mins = Math.floor((Date.now() - date.getTime()) / 60000);
-    if (mins < 1) return "Just now";
-    if (mins < 60) return `${mins}m ago`;
-    return `${Math.floor(mins / 60)}h ago`;
-  };
-
-  const getActionColor = (action: ActivityLog["action"]) => {
-    switch (action) {
-      case "capture":
-        return "text-primary";
-      case "apply":
-        return "text-secondary";
-      case "burn":
-        return "text-accent";
-      case "lp":
-        return "text-cyan-400";
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setTokenImage(file);
     }
   };
 
+  const descriptionLength = description.length;
+
   return (
     <div className="page-enter container mx-auto px-6 py-8">
-      <div className="grid lg:grid-cols-[280px_1fr_320px] gap-6">
-        {/* LEFT COLUMN */}
-        <div className="space-y-6">
-          {/* Wallet Card */}
-          <GlassCard className="p-5">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
-                <Wallet className="w-5 h-5 text-secondary" />
-              </div>
-              <div>
-                <h3 className="font-semibold">Wallet</h3>
-                <p className="text-xs text-muted-foreground">
-                  {walletConnected ? "Connected" : "Not connected"}
-                </p>
-              </div>
-            </div>
-            <Button
-              onClick={() => setWalletConnected(!walletConnected)}
-              variant={walletConnected ? "outline" : "default"}
-              className={cn(
-                "w-full transition-all duration-300",
-                !walletConnected && "bg-secondary hover:bg-secondary/90 hover:shadow-[0_0_20px_-5px_rgba(124,92,255,0.4)]"
-              )}
-            >
-              {walletConnected ? "Disconnect" : "Select Wallet"}
-            </Button>
-          </GlassCard>
-
-          {/* Your Tokens */}
-          <GlassCard className="p-5">
-            <h3 className="font-semibold mb-4">Your Tokens</h3>
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search tokens..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 bg-muted/50 border-border/50"
-              />
-            </div>
-            <div className="space-y-2 max-h-[300px] overflow-y-auto">
-              {walletConnected ? (
-                filteredTokens.map((token) => (
-                  <button
-                    key={token.id}
-                    onClick={() => setSelectedToken(token)}
-                    className={cn(
-                      "w-full p-3 rounded-lg text-left transition-all border",
-                      selectedToken?.id === token.id
-                        ? "bg-primary/10 border-primary/30"
-                        : "hover:bg-muted/50 border-transparent"
-                    )}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium">{token.symbol}</span>
-                      <span
-                        className={cn(
-                          "text-xs px-2 py-0.5 rounded-full",
-                          token.status === "graduated"
-                            ? "bg-primary/10 text-primary"
-                            : "bg-secondary/10 text-secondary"
-                        )}
-                      >
-                        {token.status}
-                      </span>
+      <div className="max-w-6xl mx-auto">
+        {/* Two Column Layout - Token Creation Form */}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* LEFT COLUMN - Token Details */}
+          <div className="space-y-6">
+            {/* Token Details */}
+            <GlassCard className="p-6">
+              <h3 className="text-lg font-semibold mb-6">Token Details</h3>
+              
+              {/* Token Image Upload */}
+              <div className="mb-6">
+                <Label className="mb-2 block">Token Image</Label>
+                <label className="flex flex-col items-center justify-center w-32 h-32 border-2 border-dashed border-white/10 rounded-lg cursor-pointer hover:border-white/20 transition-colors bg-muted/30">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                  {tokenImage ? (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <img
+                        src={URL.createObjectURL(tokenImage)}
+                        alt="Token preview"
+                        className="w-full h-full object-cover rounded-lg"
+                      />
                     </div>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {token.mint.slice(0, 8)}...{token.mint.slice(-4)}
-                    </p>
-                  </button>
-                ))
-              ) : (
-                <div className="w-full p-6 rounded-lg text-center border border-dashed border-white/10">
-                  <Wallet className="w-8 h-8 text-muted-foreground/50 mx-auto mb-2" />
-                  <p className="text-sm text-muted-foreground mb-1">Connect Wallet</p>
-                  <p className="text-xs text-muted-foreground/70">Connect your wallet to view tokens</p>
-                </div>
-              )}
-            </div>
-          </GlassCard>
-
-          {/* Import Token */}
-          <GlassCard className="p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <Import className="w-4 h-4 text-muted-foreground" />
-              <h3 className="font-semibold">Import Token</h3>
-            </div>
-            <Input
-              placeholder="Mint address..."
-              value={mintAddress}
-              onChange={(e) => setMintAddress(e.target.value)}
-              className="mb-3 bg-muted/50 border-border/50 font-mono text-xs"
-            />
-            <Button className="w-full" variant="outline" disabled={!mintAddress}>
-              Import & Configure
-            </Button>
-            <div className="mt-4 space-y-2 text-xs text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px]">1</span>
-                Import
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px]">2</span>
-                Configure
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px]">3</span>
-                Activate
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-muted flex items-center justify-center text-[10px]">4</span>
-                Monitor
-              </div>
-            </div>
-          </GlassCard>
-        </div>
-
-        {/* MIDDLE COLUMN - Token Console */}
-        <div className="space-y-6">
-          {/* Selected Token Overview */}
-          {selectedToken && (
-            <GlassCard className="p-6" glow>
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  {walletConnected ? (
-                    <>
-                      <h2 className="text-2xl font-bold">{selectedToken.name}</h2>
-                      <p className="text-muted-foreground">{selectedToken.symbol}</p>
-                    </>
                   ) : (
                     <>
-                      <h2 className="text-2xl font-bold text-muted-foreground">Connect Wallet</h2>
-                      <p className="text-muted-foreground/70 text-sm">Connect your wallet to view token details</p>
+                      <Upload className="w-6 h-6 text-muted-foreground mb-2" />
+                      <span className="text-xs text-muted-foreground">Upload</span>
                     </>
                   )}
-                </div>
-                {walletConnected && (
-                  <span
-                    className={cn(
-                      "px-3 py-1 rounded-full text-sm font-medium",
-                      selectedToken.status === "graduated"
-                        ? "bg-primary/10 text-primary"
-                        : "bg-secondary/10 text-secondary"
-                    )}
-                  >
-                    {selectedToken.status === "graduated" ? "Graduated" : "Bonding"}
+                </label>
+              </div>
+
+              {/* Name Field */}
+              <div className="mb-4">
+                <Label htmlFor="token-name">Name</Label>
+                <Input
+                  id="token-name"
+                  placeholder="e.g. Creator Token"
+                  value={tokenName}
+                  onChange={(e) => setTokenName(e.target.value)}
+                  className="mt-2 bg-muted/50 border-border/50"
+                />
+              </div>
+
+              {/* Ticker Field */}
+              <div className="mb-4">
+                <Label htmlFor="ticker">Ticker</Label>
+                <Input
+                  id="ticker"
+                  placeholder="e.g. CREAT"
+                  value={ticker}
+                  onChange={(e) => setTicker(e.target.value)}
+                  className="mt-2 bg-muted/50 border-border/50"
+                />
+              </div>
+
+              {/* Description Field */}
+              <div className="mb-4">
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Describe your token..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  maxLength={200}
+                  className="mt-2 bg-muted/50 border-border/50 min-h-[100px] resize-none"
+                />
+                <div className="flex justify-end mt-1">
+                  <span className="text-xs text-muted-foreground">
+                    {descriptionLength}/200
                   </span>
-                )}
-              </div>
-
-              <div className="grid grid-cols-3 gap-6 mb-6">
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Price</p>
-                  <p className="text-xl font-semibold">
-                    {walletConnected ? `$${selectedToken.price.toFixed(4)}` : "$0.0000"}
-                  </p>
                 </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">Liquidity</p>
-                  <p className="text-xl font-semibold">
-                    {walletConnected ? `$${selectedToken.liquidity.toLocaleString()}` : "$0"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground mb-1">24h Change</p>
-                  <p className="text-xl font-semibold text-muted-foreground">
-                    {walletConnected ? (
-                      <span className={selectedToken.change24h > 0 ? "text-primary" : "text-destructive"}>
-                        {selectedToken.change24h > 0 ? "+" : ""}
-                        {selectedToken.change24h}%
-                      </span>
-                    ) : (
-                      "0%"
-                    )}
-                  </p>
-                </div>
-              </div>
-
-              {/* Mini sparkline placeholder */}
-              <div className="h-16 rounded-lg bg-muted/30 flex items-center justify-center">
-                <BarChart3 className="w-6 h-6 text-muted-foreground/50" />
-                <span className="ml-2 text-sm text-muted-foreground/50">Price Chart</span>
               </div>
             </GlassCard>
-          )}
 
-          {/* Flywheel Settings */}
-          <GlassCard className="p-6">
-            <h3 className="text-lg font-semibold mb-6">Flywheel Settings</h3>
-
-            {/* Mode Selector */}
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Label>Mode</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="w-3.5 h-3.5 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">Choose how the flywheel distributes captured value</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {(["balanced", "buyback", "liquidity", "burn"] as FlywheelMode[]).map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setFlywheelMode(mode)}
+            {/* Add Social Links */}
+            <GlassCard className="p-6">
+              <Collapsible open={socialLinksOpen} onOpenChange={setSocialLinksOpen}>
+                <CollapsibleTrigger className="flex items-center justify-between w-full mb-4">
+                  <h3 className="text-lg font-semibold">Add social links</h3>
+                  <ChevronUp
                     className={cn(
-                      "py-2 px-3 rounded-lg text-sm font-medium transition-all capitalize border",
-                      flywheelMode === mode
-                        ? "bg-primary text-primary-foreground border-primary/30"
-                        : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-transparent"
+                      "w-4 h-4 text-muted-foreground transition-transform",
+                      socialLinksOpen && "rotate-180"
                     )}
-                  >
-                    {mode}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Frequency */}
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Label>Cycle Frequency</Label>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Info className="w-3.5 h-3.5 text-muted-foreground" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">How often the flywheel processes and applies momentum</p>
-                  </TooltipContent>
-                </Tooltip>
-              </div>
-              <Select value={frequency} onValueChange={setFrequency}>
-                <SelectTrigger className="bg-muted/50 border-border/50">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1m">Every 1 minute</SelectItem>
-                  <SelectItem value="5m">Every 5 minutes</SelectItem>
-                  <SelectItem value="15m">Every 15 minutes</SelectItem>
-                  <SelectItem value="1h">Every 1 hour</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            {/* Sliders */}
-            <div className="space-y-6 mb-6">
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-primary" />
-                    <Label>Buy Pressure vs LP</Label>
+                  />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="website-url">Website URL</Label>
+                    <Input
+                      id="website-url"
+                      placeholder="https://..."
+                      value={websiteUrl}
+                      onChange={(e) => setWebsiteUrl(e.target.value)}
+                      className="mt-2 bg-muted/50 border-border/50"
+                    />
                   </div>
-                  <span className="text-sm text-muted-foreground">{buyPressure[0]}%</span>
-                </div>
-                <Slider
-                  value={buyPressure}
-                  onValueChange={setBuyPressure}
-                  max={100}
-                  step={5}
-                  className="[&_[role=slider]]:bg-primary"
-                />
-                <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                  <span>More LP</span>
-                  <span>More Buy</span>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <Flame className="w-4 h-4 text-accent" />
-                    <Label>Burn Intensity</Label>
+                  <div>
+                    <Label htmlFor="twitter-url">Twitter/X URL</Label>
+                    <Input
+                      id="twitter-url"
+                      placeholder="https://x.com/..."
+                      value={twitterUrl}
+                      onChange={(e) => setTwitterUrl(e.target.value)}
+                      className="mt-2 bg-muted/50 border-border/50"
+                    />
                   </div>
-                  <span className="text-sm text-muted-foreground">{burnIntensity[0]}%</span>
-                </div>
-                <Slider
-                  value={burnIntensity}
-                  onValueChange={setBurnIntensity}
-                  max={100}
-                  step={5}
-                  className="[&_[role=slider]]:bg-accent"
-                />
-              </div>
-            </div>
+                  <div>
+                    <Label htmlFor="telegram-url">Telegram URL</Label>
+                    <Input
+                      id="telegram-url"
+                      placeholder="https://t.me/..."
+                      value={telegramUrl}
+                      onChange={(e) => setTelegramUrl(e.target.value)}
+                      className="mt-2 bg-muted/50 border-border/50"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="discord-url">Discord URL</Label>
+                    <Input
+                      id="discord-url"
+                      placeholder="https://discord.gg/..."
+                      value={discordUrl}
+                      onChange={(e) => setDiscordUrl(e.target.value)}
+                      className="mt-2 bg-muted/50 border-border/50"
+                    />
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </GlassCard>
+          </div>
 
-            {/* Toggles */}
-            <div className="space-y-4 mb-6 pb-6 border-b border-border/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-secondary" />
-                  <Label>Auto-apply momentum</Label>
-                </div>
-                <Switch checked={autoApply} onCheckedChange={setAutoApply} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-muted-foreground" />
-                  <Label>Public logs</Label>
-                </div>
-                <Switch checked={publicLogs} onCheckedChange={setPublicLogs} />
-              </div>
-            </div>
+          {/* RIGHT COLUMN - Launch Summary */}
+          <div>
+            <GlassCard className="p-6">
+              <h3 className="text-lg font-semibold mb-6">Launch Summary</h3>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <Button 
-                className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 shadow-[0_0_20px_-5px_rgba(184,246,196,0.4)] hover:shadow-[0_0_30px_-5px_rgba(184,246,196,0.6)] rounded-lg"
-              >
-                Activate Flywheel
-              </Button>
+              {/* Token Preview */}
+              <div className="flex items-center gap-4 mb-6 p-4 rounded-lg bg-muted/30">
+                <div className="w-12 h-12 rounded-lg bg-background flex items-center justify-center border border-border/50">
+                  {tokenImage ? (
+                    <img
+                      src={URL.createObjectURL(tokenImage)}
+                      alt="Token"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-muted/50 rounded-lg" />
+                  )}
+                </div>
+                <div>
+                  <p className="font-semibold">{tokenName || "Token Name"}</p>
+                  <p className="text-sm text-muted-foreground">
+                    ${ticker || "TICKER"}
+                  </p>
+                </div>
+              </div>
+
+              {/* Fee Recipient */}
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground mb-1">Fee Recipient</p>
+                <p className="text-sm">
+                  {walletConnected ? "Your connected wallet" : "Not connected"}
+                </p>
+              </div>
+
+              {/* Fee Split */}
+              <div className="mb-6">
+                <p className="text-sm text-muted-foreground mb-2">Fee Split</p>
+                <div className="flex justify-between text-sm">
+                  <span>Recipient</span>
+                  <span className="font-medium">100%</span>
+                </div>
+                <div className="flex justify-between text-sm mt-1">
+                  <span>You</span>
+                  <span className="font-medium">0%</span>
+                </div>
+              </div>
+
+              {/* Cost Breakdown */}
+              <div className="mb-6 space-y-3 pb-6 border-b border-border/50">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Platform fee</span>
+                  <span>0.02 SOL</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="font-semibold">Estimated total</span>
+                  <span className="font-semibold text-primary">0.02 SOL</span>
+                </div>
+              </div>
+
+              {/* Connect Wallet Button */}
               <Button
-                variant="outline"
-                className="flex-1 border-2 hover:shadow-[0_0_20px_-5px_rgba(184,246,196,0.3)] transition-all duration-300 bg-transparent rounded-lg"
-                style={{
-                  borderColor: "rgba(255, 255, 255, 0.2)",
-                }}
-                onClick={() => setSimulateOpen(true)}
+                onClick={() => setWalletConnected(!walletConnected)}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-6 rounded-lg shadow-[0_0_20px_-5px_rgba(184,246,196,0.4)] hover:shadow-[0_0_30px_-5px_rgba(184,246,196,0.6)] mb-4"
               >
-                Simulate
+                <Wallet className="w-4 h-4 mr-2" />
+                {walletConnected ? "Wallet Connected" : "Connect Wallet"}
               </Button>
-            </div>
-          </GlassCard>
 
-          {/* Wallet & Rewards Checker */}
-          <GlassCard className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Wallet & Rewards Checker</h3>
-            <div className="flex gap-3 mb-4">
-              <Input
-                placeholder="Enter wallet address..."
-                value={checkerAddress}
-                onChange={(e) => setCheckerAddress(e.target.value)}
-                className="bg-muted/30 border-white/10 font-mono text-xs"
+              {/* Disclaimer */}
+              <p className="text-xs text-muted-foreground text-center mb-4">
+                Wallet-signed. Non-custodial. We never access your private keys.
+              </p>
+
+              {/* Links */}
+              <div className="flex items-center justify-center gap-6 text-sm">
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                >
+                  Need to claim fees?
+                  <ArrowRight className="w-3 h-3" />
+                </a>
+                <a
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
+                >
+                  Read Docs
+                  <FileText className="w-3 h-3" />
+                </a>
+              </div>
+            </GlassCard>
+          </div>
+        </div>
+
+        {/* Flywheel Settings */}
+        <GlassCard className="p-6">
+          <h3 className="text-lg font-semibold mb-6">Flywheel Settings</h3>
+
+          {/* Mode Selector */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Label>Mode</Label>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">Choose how the flywheel distributes captured value</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <div className="grid grid-cols-4 gap-2">
+              {(["balanced", "buyback", "liquidity", "burn"] as FlywheelMode[]).map((mode) => (
+                <button
+                  key={mode}
+                  onClick={() => setFlywheelMode(mode)}
+                  className={cn(
+                    "py-2 px-3 rounded-lg text-sm font-medium transition-all capitalize border",
+                    flywheelMode === mode
+                      ? "bg-primary text-primary-foreground border-primary/30"
+                      : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-transparent"
+                  )}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Frequency */}
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Label>Cycle Frequency</Label>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Info className="w-3.5 h-3.5 text-muted-foreground" />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="max-w-xs">How often the flywheel processes and applies momentum</p>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+            <Select value={frequency} onValueChange={setFrequency}>
+              <SelectTrigger className="bg-muted/50 border-border/50">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1m">Every 1 minute</SelectItem>
+                <SelectItem value="5m">Every 5 minutes</SelectItem>
+                <SelectItem value="15m">Every 15 minutes</SelectItem>
+                <SelectItem value="1h">Every 1 hour</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Sliders */}
+          <div className="space-y-6 mb-6">
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-primary" />
+                  <Label>Buy Pressure vs LP</Label>
+                </div>
+                <span className="text-sm text-muted-foreground">{buyPressure[0]}%</span>
+              </div>
+              <Slider
+                value={buyPressure}
+                onValueChange={setBuyPressure}
+                max={100}
+                step={5}
+                className="[&_[role=slider]]:bg-primary"
               />
-              <Button 
-                variant="outline" 
-                disabled={!checkerAddress}
-                className="border-white/10 hover:border-white/20"
-              >
-                Check
-              </Button>
-            </div>
-            <div className="grid grid-cols-3 gap-4 p-4 rounded-lg bg-muted/30">
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1">SOL Balance</p>
-                <p className="font-semibold">--</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1">Fee Estimate</p>
-                <p className="font-semibold">--</p>
-              </div>
-              <div className="text-center">
-                <p className="text-xs text-muted-foreground mb-1">Last Claim</p>
-                <p className="font-semibold">--</p>
+              <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                <span>More LP</span>
+                <span>More Buy</span>
               </div>
             </div>
-          </GlassCard>
-        </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="space-y-6">
-          {/* Activity Logs */}
-          <GlassCard className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold">Activity Logs</h3>
-            </div>
-            {walletConnected ? (
-              <>
-                <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-                  {(["all", "capture", "apply", "burn", "lp"] as ActionFilter[]).map((filter) => (
-                    <button
-                      key={filter}
-                      onClick={() => setActionFilter(filter)}
-                      className={cn(
-                        "px-3 py-1 rounded-full text-xs font-medium whitespace-nowrap transition-all capitalize border",
-                        actionFilter === filter
-                          ? "bg-primary/10 text-primary border-primary/30"
-                          : "bg-muted/30 text-muted-foreground hover:bg-muted/50 border-transparent"
-                      )}
-                    >
-                      {filter}
-                    </button>
-                  ))}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <Flame className="w-4 h-4 text-accent" />
+                  <Label>Burn Intensity</Label>
                 </div>
-                <div className="space-y-2 max-h-[400px] overflow-y-auto">
-                  {filteredLogs.map((log) => (
-                    <div
-                      key={log.id}
-                      className="p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors"
-                    >
-                      <div className="flex items-center justify-between mb-1">
-                        <span className={cn("text-sm font-medium capitalize", getActionColor(log.action))}>
-                          {log.action}
-                        </span>
-                        <span className="text-xs text-muted-foreground">{formatTime(log.timestamp)}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm">{log.amount} SOL</span>
-                        <a
-                          href="#"
-                          className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1"
-                        >
-                          {log.txHash}
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="py-12 text-center border border-dashed border-white/10 rounded-lg">
-                <Activity className="w-10 h-10 text-muted-foreground/50 mx-auto mb-3" />
-                <p className="text-sm text-muted-foreground mb-1">Connect Wallet</p>
-                <p className="text-xs text-muted-foreground/70">Connect your wallet to view activity logs</p>
+                <span className="text-sm text-muted-foreground">{burnIntensity[0]}%</span>
               </div>
-            )}
-          </GlassCard>
+              <Slider
+                value={burnIntensity}
+                onValueChange={setBurnIntensity}
+                max={100}
+                step={5}
+                className="[&_[role=slider]]:bg-accent"
+              />
+            </div>
+          </div>
 
-          {/* System Status */}
-          <GlassCard className="p-5">
-            <h3 className="font-semibold mb-4">System Status</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                  <span className="text-sm">Engine</span>
-                </div>
-                <span className="text-sm font-medium text-primary">Active</span>
+          {/* Toggles */}
+          <div className="space-y-4 mb-6 pb-6 border-b border-border/50">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-secondary" />
+                <Label>Auto-apply momentum</Label>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">Last cycle</span>
-                </div>
-                <span className="text-sm text-muted-foreground">2 min ago</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <ArrowRight className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">Next cycle</span>
-                </div>
-                <span className="text-sm text-muted-foreground">3:24</span>
-              </div>
+              <Switch checked={autoApply} onCheckedChange={setAutoApply} />
             </div>
-          </GlassCard>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-muted-foreground" />
+                <Label>Public logs</Label>
+              </div>
+              <Switch checked={publicLogs} onCheckedChange={setPublicLogs} />
+            </div>
+          </div>
 
-          {/* Risk Alerts */}
-          <GlassCard className="p-5">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertTriangle className="w-4 h-4 text-accent" />
-              <h3 className="font-semibold">Risk Checks</h3>
-            </div>
-            <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-accent/5 border border-accent/20">
-                <AlertTriangle className="w-4 h-4 text-accent mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">LP below threshold</p>
-                  <p className="text-xs text-muted-foreground">Consider increasing liquidity allocation</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/30">
-                <CheckCircle2 className="w-4 h-4 text-primary mt-0.5" />
-                <div>
-                  <p className="text-sm font-medium">Volatility normal</p>
-                  <p className="text-xs text-muted-foreground">Market conditions stable</p>
-                </div>
-              </div>
-            </div>
-          </GlassCard>
-        </div>
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button 
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 shadow-[0_0_20px_-5px_rgba(184,246,196,0.4)] hover:shadow-[0_0_30px_-5px_rgba(184,246,196,0.6)] rounded-lg"
+            >
+              Activate Flywheel
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1 border-2 hover:shadow-[0_0_20px_-5px_rgba(184,246,196,0.3)] transition-all duration-300 bg-transparent rounded-lg"
+              style={{
+                borderColor: "rgba(255, 255, 255, 0.2)",
+              }}
+              onClick={() => setSimulateOpen(true)}
+            >
+              Simulate
+            </Button>
+          </div>
+        </GlassCard>
       </div>
 
       {/* Simulate Modal */}
