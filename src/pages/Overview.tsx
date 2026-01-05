@@ -121,7 +121,7 @@ export function Overview() {
           
           {/* Secondary Headline */}
           <h2 className="text-[1.25rem] md:text-[2rem] lg:text-[2.75rem] font-medium text-foreground/87 leading-tight mb-12">
-            No conversion. No pretending.
+            All features. One launcher.
           </h2>
 
           {/* Subhead */}
